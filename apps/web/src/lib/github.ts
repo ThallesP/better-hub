@@ -2045,10 +2045,14 @@ export async function getDashboardOpenPRCategories(
 			}
 
 			const hasPendingReviewRequests = (node.reviewRequests?.totalCount ?? 0) > 0;
+			const hasMergeConflicts =
+				node.mergeable === "CONFLICTING" ||
+				node.mergeStateStatus === "DIRTY";
 			const isActionRequired =
 				node.reviewDecision === "CHANGES_REQUESTED" ||
 				node.reviewDecision === "REVIEW_REQUIRED" ||
-				hasPendingReviewRequests;
+				hasPendingReviewRequests ||
+				hasMergeConflicts;
 
 			if (isActionRequired) {
 				categories[node.url] = "action_required";

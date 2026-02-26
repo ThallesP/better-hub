@@ -404,7 +404,7 @@ function PRSections({
 		{
 			key: "action",
 			title: "Requires action",
-			subtitle: "Changes requested or pending review requests — follow up or update your PR.",
+			subtitle: "Changes requested, pending review requests, or merge conflicts — follow up or update your PR.",
 			items: actionRequired,
 		},
 		{
