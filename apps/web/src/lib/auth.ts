@@ -38,7 +38,7 @@ export const auth = betterAuth({
 		patSignIn(),
 		sentinel(),
 		...(process.env.VERCEL
-			? [oAuthProxy({ productionURL: "https://www.better-hub.com" })]
+			? [oAuthProxy({ productionURL: "https://hub.thalles.me" })]
 			: []),
 	],
 	user: {
