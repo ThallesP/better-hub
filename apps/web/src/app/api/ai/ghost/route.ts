@@ -3367,6 +3367,11 @@ export async function POST(req: Request) {
 
 	const modelId = resolveModel(userModelChoice, taskType);
 
+	// Check if user configured an OpenAI-compatible endpoint
+	const useOpenAiCompatible = !!(settings.openaiApiUrl && settings.openaiApiKey);
+	const openaiApiUrl = settings.openaiApiUrl;
+	const openaiApiKey = settings.openaiApiKey;
+
 	// Custom models (not in MODEL_PRICING) require the user's own API key.
 	if (!isCustomApiKey && !hasModelPricing(modelId)) {
 		return new Response(
