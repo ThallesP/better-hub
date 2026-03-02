@@ -385,7 +385,7 @@ export function CollapsibleReviewCard({
 										comment.id,
 									);
 								// Show resolve button only on the first comment in the thread
-								const isFirstInThread = thread
+								const showResolve = thread
 									? thread.comments[0]
 											?.databaseId ===
 										comment.id
@@ -415,25 +415,6 @@ export function CollapsibleReviewCard({
 													null &&
 													`:${comment.line}`}
 											</button>
-											{isFirstInThread &&
-												thread &&
-												pullNumber !=
-													null && (
-													<ResolveThreadButton
-														thread={
-															thread
-														}
-														owner={
-															owner
-														}
-														repo={
-															repo
-														}
-														pullNumber={
-															pullNumber
-														}
-													/>
-												)}
 										</div>
 										{comment.diff_hunk && (
 											<DiffHunkSnippet
@@ -470,6 +451,32 @@ export function CollapsibleReviewCard({
 												}
 											/>
 										</div>
+										{showResolve &&
+											thread &&
+											pullNumber !=
+												null && (
+												<div className="mt-2 flex justify-end">
+													<ResolveThreadButton
+														thread={
+															thread
+														}
+														owner={
+															owner
+														}
+														repo={
+															repo
+														}
+														pullNumber={
+															pullNumber
+														}
+														onResolved={() =>
+															setExpanded(
+																false,
+															)
+														}
+													/>
+												</div>
+											)}
 									</div>
 								);
 							})}
@@ -486,11 +493,13 @@ function ResolveThreadButton({
 	owner,
 	repo,
 	pullNumber,
+	onResolved,
 }: {
 	thread: ReviewThread;
 	owner: string;
 	repo: string;
 	pullNumber: number;
+	onResolved?: () => void;
 }) {
 	const [isPending, startTransition] = useTransition();
 	const [resolved, setResolved] = useState(thread.isResolved);
@@ -513,7 +522,10 @@ function ResolveThreadButton({
 					repo,
 					pullNumber,
 				);
-				if (!result.error) setResolved(true);
+				if (!result.error) {
+					setResolved(true);
+					onResolved?.();
+				}
 			}
 		});
 	};
@@ -523,21 +535,21 @@ function ResolveThreadButton({
 			onClick={handleToggle}
 			disabled={isPending}
 			className={cn(
-				"ml-auto inline-flex items-center gap-1 px-2 py-0.5 text-[10px] rounded-md transition-colors cursor-pointer shrink-0",
-				isPending && "opacity-40 pointer-events-none",
+				"inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-md border transition-colors cursor-pointer",
+				isPending && "opacity-50 pointer-events-none",
 				resolved
-					? "text-success hover:bg-success/10"
-					: "text-muted-foreground hover:text-foreground hover:bg-muted/60",
+					? "text-success border-success/30 bg-success/5 hover:bg-success/10"
+					: "text-muted-foreground border-border hover:text-foreground hover:bg-muted/60",
 			)}
 		>
 			{isPending ? (
-				<Loader2 className="w-3 h-3 animate-spin" />
+				<Loader2 className="w-3.5 h-3.5 animate-spin" />
 			) : resolved ? (
-				<CheckCircle2 className="w-3 h-3" />
+				<CheckCircle2 className="w-3.5 h-3.5" />
 			) : (
-				<Circle className="w-3 h-3" />
+				<Circle className="w-3.5 h-3.5" />
 			)}
-			{resolved ? "Resolved" : "Resolve"}
+			{resolved ? "Resolved" : "Resolve conversation"}
 		</button>
 	);
 }

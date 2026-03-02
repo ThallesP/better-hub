@@ -2190,11 +2190,13 @@ export async function getDashboardOpenPRCategories(
 			const hasMergeConflicts =
 				node.mergeable === "CONFLICTING" ||
 				node.mergeStateStatus === "DIRTY";
+			const isBranchBehind = node.mergeStateStatus === "BEHIND";
 			const isActionRequired =
 				node.reviewDecision === "CHANGES_REQUESTED" ||
 				node.reviewDecision === "REVIEW_REQUIRED" ||
 				hasPendingReviewRequests ||
-				hasMergeConflicts;
+				hasMergeConflicts ||
+				isBranchBehind;
 
 			if (isActionRequired) {
 				categories[node.url] = "action_required";
