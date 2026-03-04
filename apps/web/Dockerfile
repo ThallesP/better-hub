@@ -61,6 +61,9 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY --from=builder /app/apps/web/prisma ./apps/web/prisma
 COPY --from=builder /app/apps/web/prisma.config.ts ./apps/web/prisma.config.ts
 
+# Fix ownership so nextjs user can run prisma migrate (writes to @prisma/engines)
+RUN chown -R nextjs:nodejs /app
+
 USER nextjs
 
 EXPOSE 3000
