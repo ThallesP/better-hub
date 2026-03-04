@@ -17,9 +17,8 @@ FROM oven/bun:1.3.5-alpine AS builder
 
 WORKDIR /app
 
-# Copy deps from previous stage
+# Copy deps from previous stage (hoisted to root node_modules)
 COPY --from=deps /app/node_modules ./node_modules
-COPY --from=deps /app/apps/web/node_modules ./apps/web/node_modules
 
 # Copy all source files
 COPY . .
