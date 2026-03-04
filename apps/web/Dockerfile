@@ -8,8 +8,6 @@ COPY package.json bun.lock bunfig.toml ./
 
 # Copy workspace package.json files for dependency resolution
 COPY apps/web/package.json apps/web/package.json
-COPY packages/chrome-extension/package.json packages/chrome-extension/package.json
-COPY packages/firefox-extension/package.json packages/firefox-extension/package.json
 
 # Install all dependencies (including devDependencies for build)
 RUN bun install --frozen-lockfile
