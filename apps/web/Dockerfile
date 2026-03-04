@@ -9,8 +9,8 @@ COPY package.json bun.lock bunfig.toml ./
 # Copy workspace package.json files for dependency resolution
 COPY apps/web/package.json apps/web/package.json
 
-# Install all dependencies (including devDependencies for build)
-RUN bun install
+# Install all dependencies, skip postinstall (prisma generate needs schema files)
+RUN bun install --ignore-scripts
 
 # ── Stage 2: Build the Next.js app ────────────────────────────────────
 FROM oven/bun:1.3.5-alpine AS builder
