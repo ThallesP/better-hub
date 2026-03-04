@@ -74,7 +74,8 @@ export const auth = betterAuth({
 					}),
 				]
 			: []),
-		...(process.env.RAILWAY_PROJECT_NAME
+		...(process.env.RAILWAY_PROJECT_NAME &&
+		process.env.RAILWAY_ENVIRONMENT_NAME !== "production"
 			? [oAuthProxy({ productionURL: "https://hub.thalles.me" })]
 			: []),
 	],
