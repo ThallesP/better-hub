@@ -55,6 +55,12 @@ COPY --from=builder /app/apps/web/public ./apps/web/public
 # Copy Prisma generated client into standalone
 COPY --from=builder /app/apps/web/src/generated ./apps/web/src/generated
 
+# Copy full node_modules + Prisma files for pre-deploy migrations
+# (prisma CLI has a deep dependency tree, so copying all node_modules is simplest)
+COPY --from=deps /app/node_modules ./node_modules
+COPY --from=builder /app/apps/web/prisma ./apps/web/prisma
+COPY --from=builder /app/apps/web/prisma.config.ts ./apps/web/prisma.config.ts
+
 USER nextjs
 
 EXPOSE 3000
