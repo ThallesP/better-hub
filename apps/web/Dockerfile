@@ -10,7 +10,7 @@ COPY package.json bun.lock bunfig.toml ./
 COPY apps/web/package.json apps/web/package.json
 
 # Install all dependencies (including devDependencies for build)
-RUN bun install --frozen-lockfile
+RUN bun install
 
 # ── Stage 2: Build the Next.js app ────────────────────────────────────
 FROM oven/bun:1.3.5-alpine AS builder
